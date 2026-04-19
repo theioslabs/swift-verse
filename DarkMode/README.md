@@ -5,71 +5,43 @@
 
 ## 🌌 Introduction
 
-![Dark Mode vs Light Mode](https://source.unsplash.com/1200x600/?mobile,app,darkmode)
+![Dark Mode vs Light Mode](assets/dark-vs-light.jpeg)
 
 Ever opened an app at night and felt like your eyes were being attacked by brightness?
 
-That’s exactly why **Dark Mode exists**.
-
-But in iOS development, implementing Dark Mode is not just about flipping colors — it's about building a **smart, adaptive UI system** that responds to environment, accessibility, and user preferences.
-
-If done right, your app will:
-- ✨ Feel premium  
-- 👀 Improve usability  
-- 🍎 Align with Apple’s design philosophy  
+Dark Mode is not just a feature — it’s a **UX necessity**.
 
 ---
 
-## 🧠 The Core Idea: Dynamic UI, Not Static Colors
+## 🧠 Dynamic UI > Static Colors
 
-Most beginners do this 👇
+❌ Wrong approach:
 
 ```swift
 UIColor.white
 UIColor.black
 ````
 
-This is **wrong** ❌
-
-Why?
-
-Because these colors are **static** — they don’t adapt when the system switches between Light and Dark mode.
-
 ---
 
-### ✅ The Right Approach: Semantic (Dynamic) Colors
+✅ Correct approach:
 
 ```swift
 view.backgroundColor = .systemBackground
 label.textColor = .label
 ```
 
-👉 Apple automatically adapts these colors based on system appearance.
-
 ---
 
 ## 🎨 How Dynamic Colors Work
 
-![Dynamic Colors Diagram](https://source.unsplash.com/800x800/?diagram,ui,design)
+![Dynamic Colors](assets/dynamic-colors-diagram.jpeg)
 
-Dynamic colors are powered by:
+Dynamic colors adapt using:
 
-* `UITraitCollection`
-* `userInterfaceStyle` (Light / Dark)
+* UITraitCollection
+* userInterfaceStyle
 * System color mapping
-
-When theme changes:
-👉 iOS automatically recalculates color values
-
----
-
-### Example Mapping
-
-| Semantic Color      | Light Mode | Dark Mode  |
-| ------------------- | ---------- | ---------- |
-| `.label`            | Black      | White      |
-| `.systemBackground` | White      | Black      |
-| `.secondaryLabel`   | Dark Gray  | Light Gray |
 
 ---
 
@@ -80,53 +52,24 @@ Color.white
 Color.black
 ```
 
-❌ This breaks in Dark Mode
-
-👉 Use instead:
-
-```swift
-Color.primary
-Color(.systemBackground)
-```
+❌ Breaks in Dark Mode
 
 ---
 
-## 🏗️ Custom Branding with Dynamic Colors
+## 🏗️ Asset Catalog (Best Practice)
 
-System colors are great — but real apps need **brand identity**.
+![Asset Catalog](assets/asset-catalog.jpeg)
 
----
+Steps:
 
-### 🎨 Approach 1: Asset Catalog (Recommended)
-
-![Xcode Asset Catalog](https://source.unsplash.com/800x800/?developer,macbook,xcode)
-
-#### Steps:
-
-1. Open `Assets.xcassets`
-2. Create a **Color Set**
-3. Enable → `Any, Dark`
-4. Add Light & Dark variants
+1. Assets.xcassets
+2. Create Color Set
+3. Enable Any, Dark
+4. Add variants
 
 ---
 
-### Usage
-
-```swift
-Color("AppBackground")
-```
-
----
-
-### 🎯 Why This is Best
-
-* Centralized color management
-* Scalable for large apps
-* Designer-friendly
-
----
-
-## 🧪 Programmatic Dynamic Colors
+## 🧪 Programmatic Colors
 
 ```swift
 let dynamicColor = UIColor { trait in
@@ -134,11 +77,9 @@ let dynamicColor = UIColor { trait in
 }
 ```
 
-👉 Useful for advanced theming & runtime logic
-
 ---
 
-## 🔄 Detecting Theme Changes
+## 🔄 Detect Theme Changes
 
 ### UIKit
 
@@ -156,28 +97,13 @@ override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollect
 
 ```swift
 @Environment(\.colorScheme) var colorScheme
-
-Text(colorScheme == .dark ? "Dark Mode" : "Light Mode")
 ```
 
 ---
 
-## 🖼️ Images & Icons in Dark Mode
+## 🖼️ Images & Icons
 
-![Dark Mode Icons](https://source.unsplash.com/800x800/?icons,ui,design)
-
-Images don’t automatically adapt ❗
-
----
-
-### ✅ Option 1: Asset Variants
-
-* Light version
-* Dark version
-
----
-
-### ✅ Option 2: Template Images
+![Icons Dark Mode](assets/icons-dark-mode.jpeg)
 
 ```swift
 imageView.tintColor = .label
@@ -186,129 +112,40 @@ imageView.image = image.withRenderingMode(.alwaysTemplate)
 
 ---
 
-## 🎯 Production-Level Pattern: Design System
+## 🎯 Design System
 
 ```swift
 struct AppColors {
     static let background = Color("AppBackground")
     static let textPrimary = Color("TextPrimary")
-    static let accent = Color("AccentColor")
 }
 ```
-
----
-
-### Usage
-
-```swift
-Text("Welcome")
-    .foregroundColor(AppColors.textPrimary)
-    .background(AppColors.background)
-```
-
----
-
-### 🔥 Benefits
-
-* Consistency across app
-* Easy theming
-* Scalable architecture
-
----
-
-## 💡 Pro Tips (Senior-Level)
-
-### 🧠 Avoid Forcing Dark Mode
-
-```swift
-window.overrideUserInterfaceStyle = .dark
-```
-
-👉 Use only when necessary
-
----
-
-### 🧠 Think Beyond Colors
-
-Dark Mode also affects:
-
-* Shadows
-* Blur effects (`.ultraThinMaterial`)
-* Depth & elevation
-
----
-
-### 🧠 Combine with Accessibility
-
-* Dynamic Type
-* High contrast
-* VoiceOver
 
 ---
 
 ## 🧪 Testing Dark Mode
 
-![Testing Dark Mode](https://source.unsplash.com/1200x600/?iphone,darkmode)
+![Testing](assets/testing-dark-mode.jpeg)
 
-### Simulator
-
-`Shift + Cmd + A`
-
----
-
-### SwiftUI Preview
+* Simulator: Shift + Cmd + A
+* SwiftUI Preview:
 
 ```swift
-#Preview {
-    ContentView()
-        .preferredColorScheme(.dark)
-}
+.preferredColorScheme(.dark)
 ```
 
 ---
 
-## 🎤 Interview Perspective
+## 🎉 Conclusion
 
-Be ready to answer:
+Dark Mode is a **design philosophy**.
 
-* What are semantic colors?
-* Difference between `.label` and `.primary`?
-* Asset vs programmatic colors?
-* How to support Dark Mode in legacy apps?
-* How to handle images?
+Build:
 
----
-
-## 🎉 Final Thoughts
-
-Dark Mode is not just a feature.
-It’s a **design philosophy**.
-
-When done right:
-
-* Your app looks premium
-* Feels natural
-* Adapts intelligently
+* Adaptive UI
+* Scalable design system
+* Accessible experience
 
 ---
 
-## ❤️ Closing Note
-
-If you're building iOS apps today:
-
-👉 Dark Mode is expected
-👉 Dynamic UI is standard
-👉 Design Systems are essential
-
----
-
-## 🚀 Next Steps
-
-* Build a **SwiftUI Dark Mode demo app**
-* Create a **Design System using SPM**
-* Add real UI screens & components
-
----
-
-**Made with ❤️ for iOS Developers**
-
+**Made with ❤️ for iOS Labs**
